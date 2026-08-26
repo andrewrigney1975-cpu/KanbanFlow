@@ -80,7 +80,7 @@ public class ProjectService
         // hold for these keys (a pre-migration leftover, or a value a non-Org-Admin tried to sneak
         // into a settings PUT — see UpdateProjectSettingsAsync) is always overridden here with the
         // real, org-level value, never trusted from the project's own row.
-        settings = settings with { Forms = orgEnterprise.Forms, PortfolioPlanner = orgEnterprise.PortfolioPlanner, Portals = orgEnterprise.Portals };
+        settings = settings with { Forms = orgEnterprise.Forms, PortfolioPlanner = orgEnterprise.PortfolioPlanner, Portals = orgEnterprise.Portals, Resources = orgEnterprise.Resources };
 
         return new ProjectDetailDto(
             project.Id, project.Name, project.Key, project.OrganisationId,
@@ -337,7 +337,7 @@ public class ProjectService
             var org = await _db.Organisations.FirstOrDefaultAsync(o => o.Id == project.OrganisationId);
             if (org is not null)
             {
-                org.EnterpriseSettingsJson = EnterpriseSettingsSerializer.Serialize(new EnterpriseSettingsDto(settings.Forms, settings.PortfolioPlanner, settings.Portals));
+                org.EnterpriseSettingsJson = EnterpriseSettingsSerializer.Serialize(new EnterpriseSettingsDto(settings.Forms, settings.PortfolioPlanner, settings.Portals, settings.Resources));
             }
         }
 
@@ -346,7 +346,7 @@ public class ProjectService
         await _db.SaveChangesAsync();
 
         var orgEnterprise = await GetOrgEnterpriseSettingsAsync(project.OrganisationId);
-        return settings with { Forms = orgEnterprise.Forms, PortfolioPlanner = orgEnterprise.PortfolioPlanner, Portals = orgEnterprise.Portals };
+        return settings with { Forms = orgEnterprise.Forms, PortfolioPlanner = orgEnterprise.PortfolioPlanner, Portals = orgEnterprise.Portals, Resources = orgEnterprise.Resources };
     }
 
     private async Task<EnterpriseSettingsDto> GetOrgEnterpriseSettingsAsync(Guid organisationId)

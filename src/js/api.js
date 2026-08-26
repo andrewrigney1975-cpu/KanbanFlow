@@ -812,6 +812,13 @@ export var portfolioApi = {
   getResourcingSummary: function(){
     return apiFetch('/organisations/me/portfolio/resourcing', {method: 'GET'});
   },
+  /* Backs the Resources view (org-wide utilisation-over-time chart) — GET, deliberately org-wide (no
+     projectIds param), same shape as getResourcingSummary. One row per real ProjectMember or
+     ProjectResourcePlaceholder with a non-zero AllocatedFraction, each carrying its own project's
+     dates — see PortfolioResourceService.ListResourceAssignmentsAsync's doc comment. */
+  listResourceAssignments: function(){
+    return apiFetch('/organisations/me/portfolio/resource-assignments', {method: 'GET'});
+  },
   /* Upserts one (project, pillar) fulfilment % — the only write path for Enterprise Strategy
      Management's project-linkage data, called from the Portfolio Planner's per-project Strategy
      modal (both active and inactive/planned projects). Lives under this same /portfolio namespace

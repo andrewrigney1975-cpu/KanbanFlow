@@ -162,6 +162,7 @@
         <div class="kf-side-nav-label">Views</div>
         <button type="button" class="kf-side-nav-item" id="navTaskListBtn" title="List View"><span class="kf-icon" data-icon="list" data-size="18"></span><span class="kf-side-nav-text">List View</span></button>
         <button type="button" class="kf-side-nav-item" id="navTimelineBtn" title="Timeline"><span class="kf-icon" data-icon="timeline" data-size="18"></span><span class="kf-side-nav-text">Timeline</span></button>
+        <button type="button" class="kf-side-nav-item kf-vis-hidden" id="navResourcesBtn" title="Resources"><span class="kf-icon" data-icon="team" data-size="18"></span><span class="kf-side-nav-text">Resources</span></button>
         <button type="button" class="kf-side-nav-item" id="navDepMapBtn" title="Dependency Map"><span class="kf-icon" data-icon="graph" data-size="18"></span><span class="kf-side-nav-text">Dependency Map</span></button>
         <button type="button" class="kf-side-nav-item" id="navCostBenefitBtn" title="Cost/Benefit Chart"><span class="kf-icon" data-icon="quadrant" data-size="18"></span><span class="kf-side-nav-text">Cost/Benefit Chart</span></button>
         <button type="button" class="kf-side-nav-item" id="navOrgChartBtn" title="Org Chart"><span class="kf-icon" data-icon="orgChart" data-size="18"></span><span class="kf-side-nav-text">Org Chart</span></button>
@@ -3117,6 +3118,14 @@
                 <span class="kf-setting-row-desc">A curated home page for org users who aren't necessarily project members — a place to fill in forms, track submitted requests, and browse answers to common questions. Authored centrally by Org Admins. Applies to every project in the organisation, not just this one.</span>
               </span>
             </label>
+            <label class="kf-setting-row">
+              <input type="checkbox" id="settingsShowResourcesBtn">
+              <span class="kf-icon kf-setting-row-icon" data-icon="team" data-size="16"></span>
+              <span class="kf-setting-row-text">
+                <span class="kf-setting-row-title">Resources</span>
+                <span class="kf-setting-row-desc">A chart of every team member's allocation across the whole portfolio over time, with a warning when someone's concurrent allocation exceeds 100%. Org Admins only. Applies to every project in the organisation, not just this one.</span>
+              </span>
+            </label>
           </div>
         </div>
       </div>
@@ -3557,6 +3566,58 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- Resources (Org Admin only): org-wide team member utilisation-over-time chart. See root
+     CLAUDE.md's Resources view note before touching this. -->
+<div class="kf-overlay hidden" id="resourcesOverlay">
+  <div class="kf-modal kf-modal-lg" role="dialog" aria-modal="true">
+    <div class="kf-modal-header">
+      <h2 id="resourcesTitle">Resources</h2>
+      <div class="kf-modal-header-actions">
+        <button class="kf-btn kf-btn-ghost" id="resourcesClose" title="Close"><span class="kf-icon" data-icon="close" data-size="18"></span></button>
+      </div>
+    </div>
+    <div class="kf-modal-body" id="resourcesBody">
+      <div id="resourcesOverlapAlert" class="kf-resources-alert hidden"></div>
+      <div class="kf-health-section">
+        <div class="kf-health-section-header-row">
+          <h3 class="kf-health-section-title">Utilisation</h3>
+          <div class="kf-chart-controls">
+            <div class="kf-segmented-control" role="group" aria-label="Group by">
+              <button type="button" class="kf-segmented-btn kf-active" id="resourcesGroupByPersonBtn">By Person</button>
+              <button type="button" class="kf-segmented-btn" id="resourcesGroupByActivityBtn">By Activity</button>
+            </div>
+            <select id="resourcesScaleSelect" class="kf-timeline-scale-select" aria-label="Resources timeline granularity">
+              <option value="day">Day</option>
+              <option value="week">Week</option>
+              <option value="fortnight">Fortnight</option>
+              <option value="month" selected>Month</option>
+              <option value="quarter">Quarter</option>
+              <option value="year">Year</option>
+            </select>
+            <input type="date" id="resourcesStartInput" aria-label="Reporting period start date">
+            <input type="date" id="resourcesEndInput" aria-label="Reporting period end date">
+            <select id="resourcesPeriodPickerSelect" aria-label="Quick-set the reporting period">
+              <option value="month">This Month</option>
+              <option value="quarter" selected>This Quarter</option>
+              <option value="half">This Half</option>
+              <option value="year">This Year</option>
+              <option value="nextyear">Next Year</option>
+            </select>
+          </div>
+        </div>
+        <div id="resourcesChart"></div>
+        <div id="resourcesNoData" class="kf-health-no-data hidden"></div>
+        <div id="resourcesUndatedNote" class="kf-resources-undated hidden"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="kf-org-member-popover hidden" id="resourcesPopover">
+  <div class="kf-org-member-popover-title" id="resourcesPopoverTitle"></div>
+  <div class="kf-org-member-popover-list" id="resourcesPopoverList"></div>
 </div>
 
 <!-- Portfolio Planner: Add Project modal -->

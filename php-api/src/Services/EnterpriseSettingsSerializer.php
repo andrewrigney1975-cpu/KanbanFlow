@@ -11,7 +11,7 @@ namespace Enkl\Api\Services;
  * every other App Settings toggle. Every field is opt-in (default false) — a missing/corrupted value
  * must never silently turn on a module no Org Admin has ever actually switched on.
  *
- * @phpstan-type EnterpriseSettings array{forms:bool,portfolioPlanner:bool,portals:bool}
+ * @phpstan-type EnterpriseSettings array{forms:bool,portfolioPlanner:bool,portals:bool,resources:bool}
  */
 final class EnterpriseSettingsSerializer
 {
@@ -19,6 +19,7 @@ final class EnterpriseSettingsSerializer
         'forms' => false,
         'portfolioPlanner' => false,
         'portals' => false,
+        'resources' => false,
     ];
 
     public static function serialize(array $settings): string

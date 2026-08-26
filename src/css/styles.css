@@ -4749,6 +4749,156 @@
     user-select: none;
   }
 
+  /* Resources view — org-wide utilisation-over-time chart (views/resources.js). */
+  .kf-resources-svg {
+    user-select: none;
+  }
+
+  .kf-resources-bar {
+    cursor: pointer;
+  }
+
+  .kf-resources-row-flag svg,
+  .kf-resources-alert-icon svg {
+    color: var(--kf-danger);
+  }
+
+  .kf-segmented-control {
+    display: inline-flex;
+    border: 1.5px solid var(--kf-border);
+    border-radius: var(--kf-radius);
+    overflow: hidden;
+  }
+
+  .kf-segmented-btn {
+    border: none;
+    background: var(--kf-surface);
+    color: var(--kf-text-secondary);
+    font-size: 12px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  .kf-segmented-btn + .kf-segmented-btn {
+    border-left: 1.5px solid var(--kf-border);
+  }
+
+  .kf-segmented-btn.kf-active {
+    background: var(--kf-blue);
+    color: #fff;
+  }
+
+  .kf-resources-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: var(--kf-danger-hover-bg);
+    border: 1px solid var(--kf-danger);
+    border-radius: var(--kf-radius);
+    padding: 10px 12px;
+    margin-bottom: 12px;
+  }
+
+  .kf-resources-alert.hidden {
+    display: none;
+  }
+
+  .kf-resources-alert-body {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .kf-resources-alert-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--kf-text);
+    margin-bottom: 6px;
+  }
+
+  /* One row per over-allocated member. The name column is a fixed width (not just min-width) so
+     every row's "up to X%" and date range start at the same x position regardless of name length —
+     a plain <ul><li><strong> list left these ragged, which was hard to scan with more than a couple
+     of rows. font-variant-numeric:tabular-nums keeps the "up to X%" column's own digits aligned too
+     when peak percentages differ in digit count (e.g. 80% vs 130%). */
+  .kf-resources-alert-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 12px;
+    color: var(--kf-text-secondary);
+  }
+
+  .kf-resources-alert-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    border-radius: 3px;
+    transition: opacity 0.12s;
+  }
+
+  /* Hovering one row dims every other row (wireResourcesAlertHover in views/resources.js) so a
+     reader's eye stays on the row they're tracking in a longer list. */
+  .kf-resources-alert.kf-resources-alert-hovering .kf-resources-alert-row:not(.kf-resources-alert-row-active) {
+    opacity: 0.35;
+  }
+
+  .kf-resources-alert-name {
+    flex: 0 0 140px;
+    font-weight: 600;
+    color: var(--kf-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .kf-resources-alert-peak {
+    flex: 0 0 70px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .kf-resources-alert-range {
+    flex: 1;
+    color: var(--kf-text-secondary);
+  }
+
+  .kf-resources-undated {
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: var(--kf-column-bg);
+    border-radius: var(--kf-radius);
+  }
+
+  .kf-resources-undated.hidden {
+    display: none;
+  }
+
+  .kf-resources-undated-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--kf-text-secondary);
+    margin-bottom: 4px;
+  }
+
+  .kf-resources-undated-list {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 12px;
+    color: var(--kf-text-secondary);
+  }
+
+  .kf-resources-popover-row {
+    font-size: 12px;
+    color: var(--kf-text);
+    padding: 2px 0;
+  }
+
+  .kf-resources-popover-row strong {
+    display: inline-block;
+    min-width: 70px;
+    color: var(--kf-text-secondary);
+    font-weight: 600;
+  }
+
   .kf-portfolio-planner-timeline-filters {
     display: flex;
     align-items: center;

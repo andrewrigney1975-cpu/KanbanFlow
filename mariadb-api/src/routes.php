@@ -261,6 +261,7 @@ function registerRoutes(App $app): void
         $group->delete('/projects/{projectId}/resources/{resourceId}', [PortfolioController::class, 'removeResource']);
         $group->get('/roles', [PortfolioController::class, 'listRoles']);
         $group->get('/resourcing', [PortfolioController::class, 'getResourcingSummary']);
+        $group->get('/resource-assignments', [PortfolioController::class, 'listResourceAssignments']);
         // Fulfilment-upsert lives here, not under /strategy below — logically nested under Portfolio
         // Planner's own route namespace (the only place this is ever written from), matching
         // StrategyController.cs's [HttpPut("~/api/organisations/me/portfolio/...")] absolute-route

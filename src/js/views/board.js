@@ -166,6 +166,10 @@ export function applyHeaderButtonVisibility(){
   // portfolioPlanner), same shape as Forms just above it.
   document.getElementById('navPortfolioPlannerBtn').classList.toggle('kf-vis-hidden', !(isServerAuthoritative(project) && isOrgAdmin() && visibility.portfolioPlanner));
 
+  // Resources — same Org-Admin-only, server-authoritative-project permission gate + Enterprise
+  // opt-in shape as Portfolio Planner directly above (visibility.resources).
+  document.getElementById('navResourcesBtn').classList.toggle('kf-vis-hidden', !(isServerAuthoritative(project) && isOrgAdmin() && visibility.resources));
+
   document.getElementById('orgChartBtn').classList.toggle('kf-vis-hidden', !visibility.teamsCommittees);
   document.getElementById('navOrgChartBtn').classList.toggle('kf-vis-hidden', !visibility.teamsCommittees);
   // Workflow editing is Project-Admin-only (canManageProject, above) — same entry-point-hidden
@@ -271,6 +275,7 @@ export function openAppSettingsOverlay(){
   // never shows a state the Save button couldn't actually produce from a fresh toggle.
   document.getElementById('settingsShowPortalsBtn').checked = visibility.portals && visibility.forms;
   document.getElementById('settingsShowPortalsBtn').disabled = !visibility.forms;
+  document.getElementById('settingsShowResourcesBtn').checked = visibility.resources;
   // SAML/SCIM configuration is an org-admin-only concern (same gating as the Account menu's own
   // "SSO & Provisioning" link) — shown here purely as a discoverability shortcut into that same
   // modal, not a per-project toggle of its own.

@@ -635,6 +635,54 @@ final class PortfolioService
     }
 
     /**
+     * Backs the Resources view (org-wide utilisation-over-time chart) — every real ProjectMember and
+     * every ProjectResourcePlaceholder (filled or unfilled) across the org with a non-zero
+     * AllocatedFraction, each carrying its own project's dates so the frontend can plot a bar without
+     * a second round-trip. There's no per-assignment date range in this schema — a bar spans the
+     * whole project. Two separate queries merged in PHP, same reasoning as getResourcingSummary
+     * (unrelated tables, no shared join key besides ProjectId/UserId).
+     */
+    public function listResourceAssignments(string $organisationId): array
+    {
+        $realStmt = $this->db->prepare(<<<SQL
+            SELECT m."ProjectId", p."Name" AS "ProjectName", p."Key" AS "ProjectKey",
+                   p."StartDate" AS "ProjectStartDate", p."EndDate" AS "ProjectEndDate", p."IsActive" AS "ProjectIsActive",
+                   m."UserId", u."DisplayName", m."Role", m."AllocatedFraction"
+            FROM "ProjectMembers" m
+            JOIN "Projects" p ON p."Id" = m."ProjectId"
+            JOIN "Users" u ON u."Id" = m."UserId"
+            WHERE p."OrganisationId" = :orgId AND m."AllocatedFraction" IS NOT NULL AND m."AllocatedFraction" > 0
+        SQL);
+        $realStmt->execute(['orgId' => $organisationId]);
+
+        $placeholderStmt = $this->db->prepare(<<<SQL
+            SELECT r."ProjectId", p."Name" AS "ProjectName", p."Key" AS "ProjectKey",
+                   p."StartDate" AS "ProjectStartDate", p."EndDate" AS "ProjectEndDate", p."IsActive" AS "ProjectIsActive",
+                   r."UserId", u."DisplayName", r."Role", r."AllocatedFraction"
+            FROM "ProjectResourcePlaceholders" r
+            JOIN "Projects" p ON p."Id" = r."ProjectId"
+            LEFT JOIN "Users" u ON u."Id" = r."UserId"
+            WHERE p."OrganisationId" = :orgId AND r."AllocatedFraction" > 0
+        SQL);
+        $placeholderStmt->execute(['orgId' => $organisationId]);
+
+        $mapRow = static fn(array $r, bool $isPlaceholder): array => [
+            'projectId' => $r['ProjectId'], 'projectName' => $r['ProjectName'], 'projectKey' => $r['ProjectKey'],
+            'projectStartDate' => $r['ProjectStartDate'], 'projectEndDate' => $r['ProjectEndDate'],
+            'projectIsActive' => (bool) $r['ProjectIsActive'],
+            'userId' => $r['UserId'], 'displayName' => $r['DisplayName'], 'role' => $r['Role'],
+            'allocatedFraction' => (int) $r['AllocatedFraction'], 'isPlaceholder' => $isPlaceholder,
+        ];
+
+        $assignments = array_map(static fn(array $r): array => $mapRow($r, false), $realStmt->fetchAll());
+        foreach ($placeholderStmt->fetchAll() as $r) {
+            $assignments[] = $mapRow($r, true);
+        }
+
+        return $assignments;
+    }
+
+    /**
      * The distinct, non-blank Role values already in use across every ProjectMember in the caller's
      * org — backs the Resources overlay's role autocomplete (this is a suggestion list, not an
      * enforced vocabulary; addResource above accepts any role string).
