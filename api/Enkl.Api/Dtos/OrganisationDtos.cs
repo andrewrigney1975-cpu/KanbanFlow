@@ -17,4 +17,4 @@ public record ResetUserPasswordRequest(string? Password);
 /// <summary>The "Enterprise" App Settings toggles that apply org-WIDE rather than per-project — see
 /// Organisation.EnterpriseSettingsJson's own doc comment. All three default false (opt-in), same as
 /// their per-project predecessors.</summary>
-public record EnterpriseSettingsDto(bool Forms, bool PortfolioPlanner, bool Portals);
+public record EnterpriseSettingsDto(bool Forms, bool PortfolioPlanner, bool Portals, bool Resources);

@@ -182,6 +182,14 @@ public class PortfolioController : ControllerBase
         return Ok(await _resources.GetResourcingSummaryAsync(User.OrgId()));
     }
 
+    // GET, not POST — same reasoning as GetResourcingSummary above. Backs the Resources view (org-wide
+    // utilisation-over-time chart), deliberately org-wide with no project id filter, same as GetResourcingSummary.
+    [HttpGet("resource-assignments")]
+    public async Task<IActionResult> ListResourceAssignments()
+    {
+        return Ok(await _resources.ListResourceAssignmentsAsync(User.OrgId()));
+    }
+
     private static List<Guid> ParseProjectIds(string? projectIds) =>
         (projectIds ?? "")
             .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)

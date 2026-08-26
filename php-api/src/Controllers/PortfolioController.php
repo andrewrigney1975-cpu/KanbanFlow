@@ -164,6 +164,13 @@ final class PortfolioController extends BaseController
         return $this->json($response, $this->service()->getResourcingSummary($this->callerOrgId($request)));
     }
 
+    // GET, not POST — same reasoning as getResourcingSummary above. Backs the Resources view (org-wide
+    // utilisation-over-time chart), deliberately org-wide with no project id filter, same as getResourcingSummary.
+    public function listResourceAssignments(Request $request, Response $response): Response
+    {
+        return $this->json($response, $this->service()->listResourceAssignments($this->callerOrgId($request)));
+    }
+
     // A single comma-joined string, not a repeated/bracketed array query param — see
     // PortfolioController.cs's matching GetActivity for why (ASP.NET Core and Slim/PHP parse
     // array-shaped query strings differently, and the frontend talks to either tier unchanged).

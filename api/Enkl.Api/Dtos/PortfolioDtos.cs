@@ -110,6 +110,20 @@ public record UserAllocationDto(Guid UserId, string DisplayName, int RealAllocat
 
 public record PortfolioResourcingSummaryDto(List<UnfilledPlaceholderDto> UnfilledRoles, List<UserAllocationDto> UserAllocations);
 
+/// <summary>
+/// Backs the Resources view (org-wide utilisation-over-time chart) — one row per real ProjectMember
+/// (IsPlaceholder false) or ProjectResourcePlaceholder (IsPlaceholder true — UserId/DisplayName null
+/// for an unfilled role, set for one filled via the placeholder mechanism rather than the Team modal)
+/// with a non-zero AllocatedFraction, joined with its owning project's own dates (there's no
+/// per-assignment date range in this schema — a bar spans the whole project). ProjectStartDate/
+/// ProjectEndDate are both null for an undated project, which the frontend can't place on a time
+/// axis and lists separately instead of plotting.
+/// </summary>
+public record ResourceAssignmentDto(
+    Guid ProjectId, string ProjectName, string ProjectKey,
+    DateOnly? ProjectStartDate, DateOnly? ProjectEndDate, bool ProjectIsActive,
+    Guid? UserId, string? DisplayName, string? Role, int AllocatedFraction, bool IsPlaceholder);
+
 public record PortfolioActivityPointDto(DateOnly Date, int Count);
 
 /// <summary>Daily counts only (mirrors vendor-portal's own /dashboard/activity shape) — day/week/

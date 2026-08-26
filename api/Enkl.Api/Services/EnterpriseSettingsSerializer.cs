@@ -39,7 +39,7 @@ public static class EnterpriseSettingsSerializer
             return false;
         }
 
-        var result = new EnterpriseSettingsDto(Get("forms"), Get("portfolioPlanner"), Get("portals"));
+        var result = new EnterpriseSettingsDto(Get("forms"), Get("portfolioPlanner"), Get("portals"), Get("resources"));
         doc?.Dispose();
         return result;
     }

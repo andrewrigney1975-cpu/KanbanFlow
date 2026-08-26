@@ -183,4 +183,34 @@ public class PortfolioResourceService
 
         return new PortfolioResourcingSummaryDto(unfilledRoles, userAllocations);
     }
+
+    /// <summary>
+    /// Backs the Resources view — every real ProjectMember and unfilled ProjectResourcePlaceholder
+    /// across the whole org with a non-zero AllocatedFraction, each carrying its own project's dates
+    /// so the frontend can plot a bar without a second round-trip. Rows with no/zero allocation are
+    /// skipped — there's nothing meaningful to render for them. Two separate queries merged in memory,
+    /// same reasoning as GetResourcingSummaryAsync (unrelated tables, no shared join key besides
+    /// ProjectId/UserId).
+    /// </summary>
+    public async Task<List<ResourceAssignmentDto>> ListResourceAssignmentsAsync(Guid organisationId)
+    {
+        var realAssignments = await _db.ProjectMembers
+            .Where(m => m.Project.OrganisationId == organisationId && m.AllocatedFraction != null && m.AllocatedFraction > 0)
+            .Select(m => new ResourceAssignmentDto(
+                m.ProjectId, m.Project.Name, m.Project.Key,
+                m.Project.StartDate, m.Project.EndDate, m.Project.IsActive,
+                m.UserId, m.User.DisplayName, m.Role, m.AllocatedFraction!.Value, false))
+            .ToListAsync();
+
+        var placeholderAssignments = await _db.ProjectResourcePlaceholders
+            .Where(r => r.Project.OrganisationId == organisationId && r.AllocatedFraction > 0)
+            .Select(r => new ResourceAssignmentDto(
+                r.ProjectId, r.Project.Name, r.Project.Key,
+                r.Project.StartDate, r.Project.EndDate, r.Project.IsActive,
+                r.UserId, r.UserId == null ? null : r.User!.DisplayName, r.Role, r.AllocatedFraction, true))
+            .ToListAsync();
+
+        realAssignments.AddRange(placeholderAssignments);
+        return realAssignments;
+    }
 }

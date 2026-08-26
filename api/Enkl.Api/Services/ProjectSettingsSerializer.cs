@@ -69,7 +69,10 @@ public static class ProjectSettingsSerializer
             PortfolioPlanner: Get("portfolioPlanner", false),
             // Opt-in, same shape as Forms/PortfolioPlanner — Organisational Portals stays invisible
             // until an Org Admin deliberately turns it on for this project.
-            Portals: Get("portals", false));
+            Portals: Get("portals", false),
+            // Opt-in, same shape as Forms/PortfolioPlanner/Portals — the org-wide Resources
+            // utilisation-over-time chart stays invisible until an Org Admin deliberately turns it on.
+            Resources: Get("resources", false));
 
         doc?.Dispose();
         return result;

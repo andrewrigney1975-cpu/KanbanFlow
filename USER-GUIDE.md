@@ -950,6 +950,20 @@ only appears for an **Org Admin** — this is Elena's territory, not Marcus's.
 - **Portfolio Planner** — **What**: a Gantt-style view for planning multiple projects against each
   other before committing to timelines. **Who**: Elena, sanity-checking that two projects aren't
   quietly both claiming the same quarter's capacity.
+- **Resources** — **What**: a chart of every team member's % allocation across the whole
+  organisation's projects over time, so over-committing someone across two projects at once actually
+  shows up instead of staying buried in two separate Team lists. **Who**: Elena, checking capacity
+  before green-lighting a new project or promising a delivery date. **How**: from the side nav
+  (directly below Timeline, once switched on in App Settings → Enterprise), set a **reporting
+  period** — either type exact start/end dates, or pick a quick preset (**This Month**, **This
+  Quarter**, **This Half**, **This Year**, **Next Year**); it defaults to the current quarter.
+  Toggle **By Person** (one row per team member, a bar per project they're on) or **By Activity**
+  (one row per project, a bar per person on it, including any unfilled placeholder roles) — hover
+  any bar for that allocation's project, role, dates, and percentage. Each bar's shading reflects the
+  allocation itself (a 50% allocation reads visibly lighter than a 100% one). If someone's combined
+  allocation across their projects tops 100% at any point in the chosen period, their row gets a red
+  flag, and a summary banner at the top lists everyone affected, worst first — hover a row in that
+  banner to spotlight it against the rest of the list.
 - **Strategy fulfilment** (Portfolio Planner) — **What**: a "Strategy" button appears next to a
   project in the Portfolio Planner for setting that project's 0-100% fulfilment value against every
   Pillar — works on active projects and ones still only planned. It only shows once **both** an
@@ -1184,6 +1198,7 @@ it" tiers, though who's allowed to *initiate* it differs:
 | Stand up a whole new project by just asking (Org Admins) | [Section 8 — AI Assistant](#8-collaboration--chat-and-comments) |
 | See a permanent, live view of what's actually blocked right now | [Section 2 — A "Blocked" column](#2-the-board--your-home-base) |
 | See how the whole organisation's projects are doing | [Section 9 — Portfolio Dashboard](#9-portfolio--organisation-management) |
+| Check whether anyone is over-committed across projects | [Section 9 — Resources](#9-portfolio--organisation-management) |
 | Add a new person to the organisation | [Section 9 — Manage Users](#9-portfolio--organisation-management) |
 | Offboard someone who's leaving | [Section 9 — Manage Users](#9-portfolio--organisation-management) |
 | Reset a forgotten or compromised password | [Section 9 — Manage Users](#9-portfolio--organisation-management) |
@@ -1261,6 +1276,7 @@ isn't present on a fully local project; **Local Only** is the rare feature that 
 | AI Assistant — stand up a whole new project by asking | — | — | ✓ | Cloud Only |
 | **Portfolio & organisation management** ([Section 9](#9-portfolio--organisation-management)) | | | | |
 | Portfolio Dashboard, Portfolio Planner, Strategy fulfilment scoring | — | — | ✓ | Cloud Only |
+| Resources (org-wide utilisation-over-time chart) | — | — | ✓ | Cloud Only |
 | Manage Users (create, deactivate, reset a password) | — | — | ✓ | Cloud Only |
 | SSO & Provisioning (SAML/SCIM configuration) | — | — | ✓ | Cloud Only |
 | Save the current project as a Template | ✓ | ✓ | ✓ | Cloud + Local |

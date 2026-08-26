@@ -56,6 +56,7 @@ final class ProjectService
         $settings['forms'] = $orgEnterprise['forms'];
         $settings['portfolioPlanner'] = $orgEnterprise['portfolioPlanner'];
         $settings['portals'] = $orgEnterprise['portals'];
+        $settings['resources'] = $orgEnterprise['resources'];
 
         return [
             'id' => $project['Id'],
@@ -413,7 +414,7 @@ final class ProjectService
             if ($orgRow !== false) {
                 $newOrgJson = EnterpriseSettingsSerializer::serialize([
                     'forms' => $parsed['forms'], 'portfolioPlanner' => $parsed['portfolioPlanner'],
-                    'portals' => $parsed['portals'],
+                    'portals' => $parsed['portals'], 'resources' => $parsed['resources'],
                 ]);
                 $this->db->prepare('UPDATE "Organisations" SET "EnterpriseSettingsJson" = :json WHERE "Id" = :id')
                     ->execute(['json' => $newOrgJson, 'id' => $organisationId]);
@@ -429,6 +430,7 @@ final class ProjectService
         $parsed['forms'] = $orgEnterprise['forms'];
         $parsed['portfolioPlanner'] = $orgEnterprise['portfolioPlanner'];
         $parsed['portals'] = $orgEnterprise['portals'];
+        $parsed['resources'] = $orgEnterprise['resources'];
         return $parsed;
     }
 

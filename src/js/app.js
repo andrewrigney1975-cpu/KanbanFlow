@@ -19,6 +19,7 @@ import { setOrgChartDeps, orgChartState, lastOrgChartLayout, openOrgChartOverlay
 import { setGovMapDeps, govMapState, lastGovMapLayout, openGovMapOverlay, closeGovMapOverlay, isGovMapOpen, toggleGovMapShowRelationships, setGovMapZoom, resetGovMapZoom, zoomGovMapAtPoint } from './views/governance-map.js';
 import { setWorkflowEditorDeps, workflowEditorState, lastWorkflowLayout, openWorkflowOverlay, closeWorkflowOverlay, closeWorkflowOverlayGuarded, isWorkflowOverlayOpen, setWorkflowMode, setWorkflowZoom, resetWorkflowZoom, zoomWorkflowAtPoint, handleWorkflowScrollMouseDown, handleWorkflowPointerMove, handleWorkflowPointerUp, handleWorkflowInnerClick, handleWorkflowReflow, updateWorkflowEdgePopoverMessageVisibility, refreshWorkflowEdgeConditionControls, handleWorkflowEdgeConditionFieldChange, saveWorkflowEdgePopover, deleteWorkflowEdgeFromPopover, closeWorkflowEdgePopover, isWorkflowEdgePopoverOpen, saveWorkflowToServer, saveWorkflowColumnCapPopover, closeWorkflowColumnCapPopover, isWorkflowColumnCapPopoverOpen } from './views/workflow-editor.js';
 import { setTimelineDeps, openTimelineOverlay, closeTimelineOverlay, closeTimelineOverlayGuarded, isTimelineOverlayOpen, toggleTimelineShowArchived, renderTimeline, collapseAllTimelineGroups, expandAllTimelineGroups, saveTimelineChanges } from './views/timeline.js';
+import { openResourcesOverlay, closeResourcesOverlay, isResourcesOverlayOpen, onResourcesScaleChanged, onResourcesRangeChanged, onResourcesPeriodPickerChanged, onResourcesGroupByPersonClick, onResourcesGroupByActivityClick } from './views/resources.js';
 import { setCostBenefitDeps, cbZoomState, openCostBenefitOverlay, closeCostBenefitOverlay, isCostBenefitOverlayOpen, toggleCostBenefitShowArchived, toggleCbColumnFilterPanel, closeCbColumnFilterPanel, setCbZoom, resetCbZoom, zoomCbAtPoint } from './views/cost-benefit.js';
 
 /* ---- Features ---- */
@@ -177,6 +178,14 @@ function wireEvents(){
   document.getElementById('sideNavToggle').addEventListener('click', toggleSideNav);
   document.getElementById('navTaskListBtn').addEventListener('click', openTaskListOverlay);
   document.getElementById('navTimelineBtn').addEventListener('click', openTimelineOverlay);
+  document.getElementById('navResourcesBtn').addEventListener('click', openResourcesOverlay);
+  document.getElementById('resourcesClose').addEventListener('click', closeResourcesOverlay);
+  document.getElementById('resourcesScaleSelect').addEventListener('change', onResourcesScaleChanged);
+  document.getElementById('resourcesStartInput').addEventListener('change', onResourcesRangeChanged);
+  document.getElementById('resourcesEndInput').addEventListener('change', onResourcesRangeChanged);
+  document.getElementById('resourcesPeriodPickerSelect').addEventListener('change', onResourcesPeriodPickerChanged);
+  document.getElementById('resourcesGroupByPersonBtn').addEventListener('click', onResourcesGroupByPersonClick);
+  document.getElementById('resourcesGroupByActivityBtn').addEventListener('click', onResourcesGroupByActivityClick);
   document.getElementById('navDepMapBtn').addEventListener('click', openDepMapOverlay);
   document.getElementById('navCostBenefitBtn').addEventListener('click', openCostBenefitOverlay);
   document.getElementById('navOrgChartBtn').addEventListener('click', openOrgChartOverlay);
@@ -1795,6 +1804,9 @@ function wireEvents(){
   document.getElementById('settingsShowPortalsBtn').addEventListener('change', function(e){
     updateHeaderButtonVisibilitySetting('portals', e.target.checked);
   });
+  document.getElementById('settingsShowResourcesBtn').addEventListener('change', function(e){
+    updateHeaderButtonVisibilitySetting('resources', e.target.checked);
+  });
 
   document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileDrawer);
   document.getElementById('drawerCloseBtn').addEventListener('click', closeMobileDrawer);
@@ -2077,6 +2089,7 @@ function wireEvents(){
     else if(isPortfolioPlannerResourcesModalOpen()) closePortfolioPlannerResourcesModal();
     else if(isPortfolioPlannerStrategyModalOpen()) closePortfolioPlannerStrategyModal();
     else if(isPortfolioPlannerOverlayOpen()) closePortfolioPlannerOverlay();
+    else if(isResourcesOverlayOpen()) closeResourcesOverlay();
     else if(isStrategyOverlayOpen()) closeStrategyOverlay();
     else if(isHealthOverlayOpen()){ cancelHealthGaugeAnimation(); closeHealthOverlay(); }
     else if(isAppSettingsOverlayOpen()) closeAppSettingsOverlay();
